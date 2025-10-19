@@ -1,0 +1,209 @@
+/* css/global.css */
+
+/* ===== NEURAL NETWORK BACKGROUND ===== */
+.neural-bg-section {
+    position: relative;
+    overflow: hidden;
+}
+
+.neural-bg-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 80%, rgba(245, 158, 11, 0.2) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(245, 158, 11, 0.2) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(245, 158, 11, 0.15) 0%, transparent 50%),
+        linear-gradient(45deg, #0a0a0a 0%, #1a1a1a 100%);
+    z-index: 1;
+}
+
+/* Lżejsze nakładki przyciemiające */
+.neural-bg-section.overlay-80::before {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.neural-bg-section.overlay-70::before {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.neural-bg-section.overlay-60::before {
+    background-color: rgba(0, 0, 0, 0.25);
+}
+
+.neural-bg-section.overlay-50::before {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.neural-bg-section.overlay-40::before {
+    background-color: rgba(0, 0, 0, 0.15);
+}
+
+/* Zawartość sekcji */
+.neural-bg-section .section-content {
+    position: relative;
+    z-index: 2;
+}
+
+/* ===== CUSTOM COLORS ===== */
+.text-yellow-vfg {
+    color: #f59e0b;
+}
+
+.bg-yellow-vfg {
+    background-color: #f59e0b;
+}
+
+.border-yellow-vfg {
+    border-color: #f59e0b;
+}
+
+/* ===== BUTTONS ===== */
+.btn-primary {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: black;
+    font-weight: 600;
+    padding: 12px 24px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #d97706, #b45309);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(245, 158, 11, 0.3);
+}
+
+.btn-outline {
+    border: 2px solid #f59e0b;
+    color: #f59e0b;
+    background: transparent;
+    font-weight: 600;
+    padding: 12px 24px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-outline:hover {
+    background: #f59e0b;
+    color: black;
+    transform: translateY(-2px);
+}
+
+/* ===== CARDS ===== */
+.card-glass {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.card-glass:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: #f59e0b;
+    transform: translateY(-5px);
+}
+
+/* ===== TYPOGRAPHY ===== */
+.heading-1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1.1;
+}
+
+.heading-2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.heading-3 {
+    font-size: 1.875rem;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.slide-in-left {
+    animation: slideInLeft 0.6s ease-out;
+}
+
+/* ===== UTILITIES ===== */
+.text-gradient {
+    background: linear-gradient(135deg, #f59e0b, #eab308);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.border-gradient {
+    border: 2px solid;
+    border-image: linear-gradient(135deg, #f59e0b, #eab308) 1;
+}
+
+.shadow-glow {
+    box-shadow: 0 0 30px rgba(245, 158, 11, 0.2);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .heading-1 {
+        font-size: 2.5rem;
+    }
+    
+    .heading-2 {
+        font-size: 2rem;
+    }
+    
+    .heading-3 {
+        font-size: 1.5rem;
+    }
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1f2937;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #f59e0b;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #d97706;
+}
