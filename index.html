@@ -1,0 +1,1537 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VFG Token - Token Przyszłości Motoryzacji</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FFD700;
+            --primary-dark: #B8860B;
+            --secondary: #1a202c;
+            --accent: #2d3748;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a;
+            color: #f8fafc;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        
+        /* Neural Network Background - ZAMIENIONE NA OBRAZ */
+        .neural-bg-full {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: 
+                url('images/background/neural-network.jpg') center/cover no-repeat,
+                linear-gradient(45deg, #0a0a0a 0%, #1a1a1a 100%);
+            overflow: hidden;
+        }
+        
+        /* Section Overlays - ZACHOWANE DLA WSZYSTKICH SEKCJI */
+        .section-overlay {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .section-overlay::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: -1;
+        }
+
+        /* Original Styles - BEZ ZMIAN */
+        .gradient-bg {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 215, 0, 0.05) 100%);
+        }
+        
+        .token-card {
+            background: rgba(26, 32, 44, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .presale-stage {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 215, 0, 0.05) 100%);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%);
+            color: #0a0a0a;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 215, 0, 0.3);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid #FFD700;
+            color: #FFD700;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 215, 0, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .ecosystem-card {
+            transition: all 0.3s ease;
+        }
+        
+        .ecosystem-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(255, 215, 0, 0.2);
+        }
+        
+        .team-member {
+            transition: all 0.3s ease;
+        }
+        
+        .team-member:hover {
+            transform: translateY(-5px);
+        }
+        
+        .countdown-box {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, #FFD700 0%, #B8860B 100%);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 20px;
+        }
+        
+        .live-dot {
+            animation: pulse 2s infinite;
+        }
+        
+        .message-self {
+            background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%);
+            color: #0a0a0a;
+        }
+        
+        .message-other {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+        
+        .admin-badge {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        
+        .tab-active {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: #FFD700;
+            color: #FFD700;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Neural Network Background - TERAZ Z OBRAZEM -->
+    <div class="neural-bg-full"></div>
+
+    <!-- Nawigacja -->
+    <nav class="bg-gray-900/80 backdrop-blur-md sticky top-0 z-50 border-b border-yellow-600/30">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-r from-yellow-400 to-yellow-600 flex items-center justify-center">
+                    <span class="font-bold text-gray-900">VFG</span>
+                </div>
+                <span class="text-xl font-bold text-yellow-400">VFG Token</span>
+            </div>
+            
+            <div class="hidden md:flex space-x-8">
+                <a href="#about" class="text-gray-300 hover:text-yellow-400 transition-colors">O Projekcie</a>
+                <a href="#community" class="text-gray-300 hover:text-yellow-400 transition-colors">Community</a>
+                <a href="#presale" class="text-gray-300 hover:text-yellow-400 transition-colors">Przedsprzedaż</a>
+                <a href="#tokenomics" class="text-gray-300 hover:text-yellow-400 transition-colors">Tokenomia</a>
+                <a href="#tech" class="text-gray-300 hover:text-yellow-400 transition-colors">Technologia</a>
+                <a href="#join" class="text-gray-300 hover:text-yellow-400 transition-colors">Dołącz</a>
+            </div>
+            
+            <div class="flex space-x-4">
+                <div id="walletInfo" class="hidden items-center space-x-2">
+                    <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span class="text-green-400 text-sm" id="walletShort">0x742d...3b8D</span>
+                </div>
+                
+                <button class="md:hidden text-gray-300">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sekcja główna -->
+<section class="section-overlay hero-gradient py-20 md:py-32">
+    <div class="container mx-auto px-4 flex flex-col items-center text-center">
+        <div class="mb-6">
+            <img src="images/logo.png" alt="VFG Token" class="w-48 h-48 mx-auto">
+        </div>
+        <h1 class="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 text-transparent bg-clip-text drop-shadow-lg">
+            VFG TOKEN
+        </h1>
+        <p class="text-xl md:text-2xl text-yellow-400 font-semibold mb-8">Token Przyszłości Motoryzacji</p>
+        <p class="text-lg text-yellow-400 max-w-2xl mb-4 font-medium tracking-wide">
+            Napęd dla cyfrowej motoryzacji.
+        </p>
+        <p class="text-lg text-yellow-400 max-w-2xl mb-4 font-medium tracking-wide">
+            Zmieniamy sposób, w jaki płacisz, tuningujesz i serwisujesz swój pojazd.
+        </p>
+        <p class="text-lg text-yellow-400 max-w-2xl mb-10 font-medium tracking-wide">
+            Token VFG to paliwo nowej generacji — dla kierowców, mechaników i innowatorów.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4">
+   <button onclick="window.location.href='#community'" class="btn-primary px-8 py-3 rounded-lg bg-yellow-500 text-black font-bold hover:bg-yellow-400 transition-colors">
+  Dołącz do Community
+</button>
+
+
+            <button onclick="window.location.href='#join'" class="btn-secondary px-8 py-3 rounded-lg bg-yellow-600 text-black font-bold hover:bg-yellow-500 transition-colors">
+  Dołącz do Whitelisty
+</button>
+
+        </div>
+       <div class="mt-16 bg-gray-900 p-4 md:p-6 rounded-xl border border-yellow-600 shadow-lg flex flex-col md:flex-row items-center gap-4 text-center md:text-left">
+    <div class="bg-yellow-500 text-black font-bold px-4 py-2 rounded-full text-sm mb-2 md:mb-0">
+        ETAP 1
+    </div>
+    
+    <div class="flex justify-center mb-2 md:mb-0">
+        <div class="w-3 h-3 bg-yellow-500 rounded-full animate-pulse"></div>
+    </div>
+    
+    <div class="flex-1">
+        <h3 class="text-yellow-300 text-lg md:text-xl font-bold mb-2">Etap 1: Budowanie Społeczności</h3>
+        <p class="text-gray-300 text-sm md:text-base mb-3">Zbieramy siłę VFG do połowy 2026. Dołącz do rewolucji motoryzacyjnej zanim ruszy przedsprzedaż</p>
+        
+        <div class="flex flex-col sm:flex-row items-center justify-between text-sm gap-2">
+            <span class="text-gray-400">Cel: Q2 2026</span>
+            <span class="text-yellow-400">Postęp: 12%</span>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+<!-- Roadmap VFG -->
+<div class="mt-20 w-full flex justify-center">
+  <div class="w-full max-w-4xl text-center">
+    <h2 class="text-3xl md:text-4xl font-bold text-yellow-400 mb-10">📍 Roadmap VFG Token 2.0</h2>
+    <div class="space-y-10 text-left">
+
+      <!-- Etap 1 -->
+      <div class="relative pl-6 border-l-4 border-yellow-500">
+        <div class="absolute -left-3 top-1 w-5 h-5 bg-yellow-500 rounded-full border-4 border-black animate-pulse"></div>
+        <h3 class="text-yellow-300 text-xl font-semibold">
+          Etap 1: Budowanie Społeczności 
+          <span class="text-sm text-gray-400">Q4 2025 – Q2 2026</span>
+        </h3>
+        <p class="text-gray-300 mt-2 text-sm">
+          Uruchomienie strony internetowej i kanałów social media (Telegram, Discord, X/Twitter). 
+          Kampanie informacyjne, zapisy do whitelisty, AMA, konkursy, dropy NFT. 
+          Cel: min. 10 000 członków społeczności przed przedsprzedażą.
+        </p>
+      </div>
+
+      <!-- Etap 2 -->
+      <div class="relative pl-6 border-l-4 border-yellow-500">
+        <div class="absolute -left-3 top-1 w-5 h-5 bg-yellow-500 rounded-full border-4 border-black animate-pulse"></div>
+        <h3 class="text-yellow-300 text-xl font-semibold">
+          Etap 2: Przedsprzedaż Tokena 
+          <span class="text-sm text-gray-400">Q3 – Q4 2026</span>
+        </h3>
+        <p class="text-gray-300 mt-2 text-sm">
+          Uruchomienie smart contractu ERC-20/BEP-20. 
+          Przedsprzedaż w 3 etapach: Seed, Private Sale, Public Presale. 
+          Integracja z MetaMask, audyt kontraktu. 
+          Cel: sprzedaż min. 35 mln tokenów VFG i zapewnienie płynności.
+        </p>
+      </div>
+
+      <!-- Etap 3 -->
+      <div class="relative pl-6 border-l-4 border-yellow-500">
+        <div class="absolute -left-3 top-1 w-5 h-5 bg-yellow-500 rounded-full border-4 border-black animate-pulse"></div>
+        <h3 class="text-yellow-300 text-xl font-semibold">
+          Etap 3: Listing i Płynność 
+          <span class="text-sm text-gray-400">Q1 2027</span>
+        </h3>
+        <p class="text-gray-300 mt-2 text-sm">
+          Listing na DEX (Uniswap, PancakeSwap) oraz CEX (MEXC, Gate.io). 
+          Dodanie par handlowych (VFG/USDT, VFG/BNB). 
+          Zablokowanie płynności (Liquidity Lock). 
+          Rezultat: stabilna cena i publiczny dostęp do tokena.
+        </p>
+      </div>
+
+      <!-- Etap 4 -->
+      <div class="relative pl-6 border-l-4 border-yellow-500">
+        <div class="absolute -left-3 top-1 w-5 h-5 bg-yellow-500 rounded-full border-4 border-black animate-pulse"></div>
+        <h3 class="text-yellow-300 text-xl font-semibold">
+          Etap 4: Uruchomienie Ekosystemu 
+          <span class="text-sm text-gray-400">Q2 – Q3 2027</span>
+        </h3>
+        <p class="text-gray-300 mt-2 text-sm">
+          Start usług VFG Tune (AI chiptuning), VFG Protect (monitoring pojazdów), 
+          VFG Fix (mechanik online) oraz VFG Pay (płatności tokenem). 
+          Pierwsze transakcje tokenem VFG w rzeczywistych usługach.
+        </p>
+      </div>
+
+      <!-- Etap 5 -->
+      <div class="relative pl-6 border-l-4 border-yellow-500">
+        <div class="absolute -left-3 top-1 w-5 h-5 bg-yellow-500 rounded-full border-4 border-black animate-pulse"></div>
+        <h3 class="text-yellow-300 text-xl font-semibold">
+          Etap 5: DAO i Staking 
+          <span class="text-sm text-gray-400">Q4 2027</span>
+        </h3>
+        <p class="text-gray-300 mt-2 text-sm">
+          Uruchomienie VFG DAO z możliwością głosowania społeczności. 
+          Staking z nagrodami dla posiadaczy tokena. 
+          Partnerstwa z warsztatami i firmami branży motoryzacyjnej.
+        </p>
+      </div>
+
+      <!-- Etap 6 -->
+      <div class="relative pl-6 border-l-4 border-yellow-500">
+        <div class="absolute -left-3 top-1 w-5 h-5 bg-yellow-500 rounded-full border-4 border-black animate-pulse"></div>
+        <h3 class="text-yellow-300 text-xl font-semibold">
+          Etap 6: Skalowanie i Ekspansja 
+          <span class="text-sm text-gray-400">2028+</span>
+        </h3>
+        <p class="text-gray-300 mt-2 text-sm">
+          Wersje mobilne aplikacji VFG App (Android/iOS). 
+          Integracja z systemami OBD, GPS i flotami. 
+          Ekspansja na rynki EU, USA i Azji. 
+          VFG staje się globalnym standardem płatności w usługach motoryzacyjnych.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- Klauzula informacyjna -->
+<p class="text-xs text-gray-500 mt-10 max-w-3xl mx-auto text-center">
+  Roadmapa VFG TOKEN 2.0 ma charakter wyłącznie informacyjny i nie stanowi oferty w rozumieniu przepisów prawa cywilnego, finansowego ani inwestycyjnego. Przedstawione etapy rozwoju projektu są planami, które mogą ulec zmianie w zależności od uwarunkowań rynkowych, technologicznych i regulacyjnych. VFG TOKEN nie gwarantuje osiągnięcia wskazanych celów ani zwrotu z inwestycji. Udział w przedsprzedaży tokenów może wiązać się z ryzykiem i powinien być poprzedzony analizą prawną oraz finansową we własnym zakresie. Wymienione platformy (np. MetaMask, Uniswap, Discord) są kompatybilne technologicznie, ale nie stanowią formalnych partnerów, o ile nie zaznaczono inaczej.
+</p>
+
+<p class="text-xs text-gray-500 mt-4 max-w-3xl mx-auto text-center">
+  The VFG TOKEN 2.0 roadmap is for informational purposes only and does not constitute an offer under civil, financial, or investment law. The development stages presented are plans that may change depending on market, technological, or regulatory conditions. VFG TOKEN does not guarantee the achievement of stated goals or any return on investment. Participation in token presale may involve risk and should be preceded by independent legal and financial analysis. Mentioned platforms (e.g., MetaMask, Uniswap, Discord) are technologically compatible but do not represent formal partnerships unless explicitly stated.
+</p>
+
+
+
+    </div>
+</section>
+
+   <!-- Sekcja Dołącz do Społeczności -->
+<section id="community" class="section-overlay py-20">
+    <div class="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
+    <div class="text-center p-6">
+        <a href="https://t.me/VFGTOKEN" target="_blank" class="block">
+            <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fab fa-telegram text-2xl text-white"></i>
+            </div>
+            <h3 class="text-xl font-bold text-yellow-400 mb-2">Telegram</h3>
+            <p class="text-gray-400">Dołącz do dyskusji</p>
+        </a>
+    </div>
+            
+    <div class="text-center p-6">
+    <a href="https://x.com/VFGTOKEN" target="_blank" class="block hover:scale-105 transition-transform">
+        <div class="w-16 h-16 bg-black rounded-full flex items-center justify-center mx-auto mb-4">
+            <img src="images/xlogo.png" alt="X" class="w-8 h-8">
+        </div>
+        <h3 class="text-xl font-bold text-yellow-400 mb-2">X</h3>
+        <p class="text-gray-400">Śledź aktualności</p>
+    </a>
+</div>
+            
+            
+    <div class="text-center p-6">
+    <a href="https://www.youtube.com/@VFG-TOKEN" target="_blank" class="block hover:scale-105 transition-transform">
+        <div class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fab fa-youtube text-2xl text-white"></i>
+        </div>
+        <h3 class="text-xl font-bold text-yellow-400 mb-2">YouTube</h3>
+        <p class="text-gray-400">Obejrzyj materiały</p>
+    </a>
+</div>
+            
+            <div class="text-center p-6">
+                <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fab fa-facebook text-2xl text-white"></i>
+                </div>
+                <h3 class="text-xl font-bold text-yellow-400 mb-2">Facebook</h3>
+                <p class="text-gray-400">Polub naszą stronę</p>
+            </div>
+            
+           <div class="text-center p-6">
+    <a href="https://discord.gg/eBh5VFFm" target="_blank" class="block hover:scale-105 transition-transform">
+        <div class="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fab fa-discord text-2xl text-white"></i>
+        </div>
+        <h3 class="text-xl font-bold text-yellow-400 mb-2">Discord</h3>
+        <p class="text-gray-400">Dołącz do serwera</p>
+    </a>
+</div>
+            
+        </div>
+    </div>
+</section>
+
+   <!-- O Projekcie -->
+<section id="about" class="section-overlay py-20">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl md:text-4xl font-bold text-center mb-4 text-yellow-400">O Projekcie</h2>
+    <p class="text-gray-400 text-center max-w-3xl mx-auto mb-16">
+      VFG Token to rewolucyjny ekosystem łączący świat kryptowalut z branżą motoryzacyjną, tuningową i automatyzacją usług serwisowych. Projekt oparty na technologii Web3, AI i zdecentralizowanym zarządzaniu.
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Karta -->
+      <div class="ecosystem-card token-card p-6 rounded-xl transition duration-300 hover:bg-yellow-900/10 hover:scale-[1.02] group">
+        <div class="w-14 h-14 rounded-full bg-yellow-900/30 flex items-center justify-center mb-4">
+          <i class="fas fa-money-bill-wave text-yellow-400 text-xl"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-2 text-yellow-400">VFG Pay</h3>
+        <p class="text-gray-400 group-hover:text-gray-300 transition">
+          Płatności w warsztatach, aplikacjach i za usługi tuningowe przy użyciu tokena VFG — bezpośrednio z portfela Web3.
+        </p>
+      </div>
+
+      <div class="ecosystem-card token-card p-6 rounded-xl transition duration-300 hover:bg-yellow-900/10 hover:scale-[1.02] group">
+        <div class="w-14 h-14 rounded-full bg-yellow-900/30 flex items-center justify-center mb-4">
+          <i class="fas fa-shield-alt text-yellow-400 text-xl"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-2 text-yellow-400">VFG Protect</h3>
+        <p class="text-gray-400 group-hover:text-gray-300 transition">
+          Ochrona pojazdów z wykorzystaniem AI, alertów awaryjnych, geolokalizacji i monitoringu satelitarnego.
+        </p>
+      </div>
+
+      <div class="ecosystem-card token-card p-6 rounded-xl transition duration-300 hover:bg-yellow-900/10 hover:scale-[1.02] group">
+        <div class="w-14 h-14 rounded-full bg-yellow-900/30 flex items-center justify-center mb-4">
+          <i class="fas fa-tachometer-alt text-yellow-400 text-xl"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-2 text-yellow-400">VFG Tune</h3>
+        <p class="text-gray-400 group-hover:text-gray-300 transition">
+          Dostęp do zaawansowanych narzędzi tuningu online, plików ECU i konfiguracji silnika wspieranych przez AI.
+        </p>
+      </div>
+
+      <div class="ecosystem-card token-card p-6 rounded-xl transition duration-300 hover:bg-yellow-900/10 hover:scale-[1.02] group">
+        <div class="w-14 h-14 rounded-full bg-yellow-900/30 flex items-center justify-center mb-4">
+          <i class="fas fa-tools text-yellow-400 text-xl"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-2 text-yellow-400">VFG Fix</h3>
+        <p class="text-gray-400 group-hover:text-gray-300 transition">
+          Wirtualny doradca serwisowy, zdalna diagnostyka i automatyczne przydzielanie zleceń do warsztatów partnerskich.
+        </p>
+      </div>
+
+      <div class="ecosystem-card token-card p-6 rounded-xl transition duration-300 hover:bg-yellow-900/10 hover:scale-[1.02] group">
+        <div class="w-14 h-14 rounded-full bg-yellow-900/30 flex items-center justify-center mb-4">
+          <i class="fas fa-chart-line text-yellow-400 text-xl"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-2 text-yellow-400">VFG Monitor</h3>
+        <p class="text-gray-400 group-hover:text-gray-300 transition">
+          Zbieranie danych telemetrii, analiza wydajności i predykcyjna diagnostyka pojazdu w czasie rzeczywistym.
+        </p>
+      </div>
+
+      <div class="ecosystem-card token-card p-6 rounded-xl transition duration-300 hover:bg-yellow-900/10 hover:scale-[1.02] group">
+        <div class="w-14 h-14 rounded-full bg-yellow-900/30 flex items-center justify-center mb-4">
+          <i class="fas fa-users text-yellow-400 text-xl"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-2 text-yellow-400">VFG DAO</h3>
+        <p class="text-gray-400 group-hover:text-gray-300 transition">
+          Zdecentralizowane zarządzanie ekosystemem przez społeczność — głosowania, propozycje i rozwój platformy.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+   <!-- Przedsprzedaż -->
+<section id="presale" class="section-overlay py-20">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl md:text-4xl font-bold text-center mb-4 text-yellow-400">Etapy dystrybucji</h2>
+        <p class="text-gray-400 text-center max-w-3xl mx-auto mb-16">
+            VFG Token zostanie udostępniony społeczności w kilku zaplanowanych fazach. Poniżej przedstawiamy orientacyjny harmonogram dystrybucji — szczegóły będą ogłaszane na bieżąco.
+        </p>
+
+        <div class="max-w-4xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="presale-stage p-6 rounded-xl text-center">
+                    <h3 class="text-xl font-bold mb-2 text-yellow-400">Seed</h3>
+                    <p class="text-gray-400 text-sm">Wczesna faza dla najbliższych wspierających</p>
+                    <p class="text-xs text-gray-500 mt-2 italic">Planowana alokacja: 5%</p>
+                </div>
+
+                <div class="presale-stage p-6 rounded-xl text-center">
+                    <h3 class="text-xl font-bold mb-2 text-yellow-400">Private Sale</h3>
+                    <p class="text-gray-400 text-sm">Zamknięta faza dla partnerów i społeczności</p>
+                    <p class="text-xs text-gray-500 mt-2 italic">Planowana alokacja: 10%</p>
+                </div>
+
+                <div class="presale-stage p-6 rounded-xl text-center">
+                    <h3 class="text-xl font-bold mb-2 text-yellow-400">Public Presale</h3>
+                    <p class="text-gray-400 text-sm">Otwarte okno zakupu dla wszystkich zainteresowanych</p>
+                    <p class="text-xs text-gray-500 mt-2 italic">Planowana alokacja: 15%</p>
+                </div>
+
+                <div class="presale-stage p-6 rounded-xl text-center">
+                    <h3 class="text-xl font-bold mb-2 text-yellow-400">Listing</h3>
+                    <p class="text-gray-400 text-sm">Token dostępny na giełdach DEX/CEX</p>
+                    <p class="text-xs text-gray-500 mt-2 italic">Cena startowa zostanie ogłoszona</p>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+    <!-- Tokenomia -->
+    <section id="tokenomics" class="section-overlay py-20">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-4 text-yellow-400">Tokenomia</h2>
+            <p class="text-gray-400 text-center max-w-3xl mx-auto mb-16">Poznaj szczegóły techniczne i ekonomiczne tokena VFG.</p>
+            
+            <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div>
+                    <h3 class="text-2xl font-bold mb-6 text-yellow-400">Informacje o Tokenie</h3>
+                    
+                    <div class="space-y-6">
+                        <div class="flex justify-between border-b border-gray-700 pb-2">
+                            <span class="text-gray-400">Całkowita podaż</span>
+                            <span class="font-semibold text-yellow-400">1,000,000,000 VFG</span>
+                        </div>
+                        
+                        <div class="flex justify-between border-b border-gray-700 pb-2">
+                            <span class="text-gray-400">Blockchain</span>
+                            <span class="font-semibold text-yellow-400">Ethereum (ERC-20) & BNB Chain (BEP-20)</span>
+                        </div>
+                        
+                        <div class="flex justify-between border-b border-gray-700 pb-2">
+                            <span class="text-gray-400">Typ tokena</span>
+                            <span class="font-semibold text-yellow-400">Utility & Governance</span>
+                        </div>
+                        
+                        <div class="flex justify-between border-b border-gray-700 pb-2">
+                            <span class="text-gray-400">Użycie</span>
+                            <span class="font-semibold text-yellow-400">Płatności, Staking, Governance</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8">
+                        <h4 class="text-xl font-bold mb-4 text-yellow-400">Główne zastosowania</h4>
+                        <ul class="space-y-4 text-gray-400">
+    <li class="flex items-start">
+        <i class="fas fa-check text-yellow-400 mt-1 mr-2"></i>
+        <div>
+            <span class="font-medium text-gray-300">Płatności za usługi tuningowe i naprawy</span>
+            <p class="text-sm mt-1">Token VFG umożliwia bezpośrednie płatności za usługi motoryzacyjne w ekosystemie VFG — od chiptuningu po diagnostykę i naprawy.</p>
+        </div>
+    </li>
+    <li class="flex items-start">
+        <i class="fas fa-check text-yellow-400 mt-1 mr-2"></i>
+        <div>
+            <span class="font-medium text-gray-300">Staking w celu uzyskania zniżek i premii</span>
+            <p class="text-sm mt-1">Blokując tokeny VFG, użytkownicy mogą uzyskać zniżki na usługi, dostęp do ekskluzywnych ofert oraz nagrody lojalnościowe.</p>
+        </div>
+    </li>
+    <li class="flex items-start">
+        <i class="fas fa-check text-yellow-400 mt-1 mr-2"></i>
+        <div>
+            <span class="font-medium text-gray-300">Głosowanie w sprawach rozwoju ekosystemu (DAO)</span>
+            <p class="text-sm mt-1">Posiadacze tokenów mają realny wpływ na rozwój projektu — mogą głosować nad nowymi funkcjami, partnerstwami i kierunkiem rozwoju.</p>
+        </div>
+    </li>
+    <li class="flex items-start">
+        <i class="fas fa-check text-yellow-400 mt-1 mr-2"></i>
+        <div>
+            <span class="font-medium text-gray-300">Dostęp do ekskluzywnych funkcji platformy</span>
+            <p class="text-sm mt-1">Token VFG odblokowuje dostęp do zaawansowanych funkcji, takich jak AI chiptuning, monitoring pojazdu, mechanik online czy płatności w aplikacji.</p>
+        </div>
+    </li>
+    <li class="flex items-start">
+        <i class="fas fa-check text-yellow-400 mt-1 mr-2"></i>
+        <div>
+            <span class="font-medium text-gray-300">Inteligentna telemetria pojazdu</span>
+            <p class="text-sm mt-1">Zbieranie danych technicznych i diagnostycznych w czasie rzeczywistym — dla użytkownika i warsztatu.</p>
+        </div>
+    </li>
+    <li class="flex items-start">
+        <i class="fas fa-check text-yellow-400 mt-1 mr-2"></i>
+        <div>
+            <span class="font-medium text-gray-300">System powiadomień awaryjnych</span>
+            <p class="text-sm mt-1">Automatyczne alerty o usterkach, kolizjach i zagrożeniach — bezpośrednio na telefon lub do warsztatu.</p>
+        </div>
+    </li>
+    <li class="flex items-start">
+        <i class="fas fa-check text-yellow-400 mt-1 mr-2"></i>
+        <div>
+            <span class="font-medium text-gray-300">Monitoring satelitarny VFG SKY</span>
+            <p class="text-sm mt-1">Lokalizacja i nadzór nad pojazdem z wykorzystaniem danych orbitalnych i AI.</p>
+        </div>
+    </li>
+    <li class="flex items-start">
+        <i class="fas fa-check text-yellow-400 mt-1 mr-2"></i>
+        <div>
+            <span class="font-medium text-gray-300">Wirtualny doradca serwisowy</span>
+            <p class="text-sm mt-1">AI wspierające diagnostykę, rekomendacje napraw i kontakt z warsztatem.</p>
+        </div>
+    </li>
+    <li class="flex items-start">
+        <i class="fas fa-check text-yellow-400 mt-1 mr-2"></i>
+        <div>
+            <span class="font-medium text-gray-300">Biblioteka plików tuningowych</span>
+            <p class="text-sm mt-1">Dostęp do zoptymalizowanych konfiguracji ECU i map silnika — dla użytkowników i tunerów.</p>
+        </div>
+    </li>
+    <li class="flex items-start">
+        <i class="fas fa-check text-yellow-400 mt-1 mr-2"></i>
+        <div>
+            <span class="font-medium text-gray-300">Automatyzacja warsztatów</span>
+            <p class="text-sm mt-1">Integracja z systemami VFG pozwala warsztatom na automatyczne przyjmowanie zleceń, diagnostykę i rozliczenia w tokenach.</p>
+        </div>
+    </li>
+</ul>
+
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-2xl font-bold mb-6 text-yellow-400">Podział Tokenów</h3>
+                    <div class="bg-gray-800/80 p-6 rounded-xl border border-yellow-600/30 backdrop-blur-sm">
+                        <!-- Statyczne zdjęcie wykresu -->
+                        <div class="h-64 flex items-center justify-center mb-6">
+    <img src="images/tokenomics-chart.png" 
+         alt="Podział tokenów VFG" 
+         class="h-full object-contain">
+</div>
+                        </div>
+                        
+                        <div class="mt-6 space-y-4">
+                            <div class="flex items-start">
+                                <div class="w-4 h-4 bg-yellow-500 rounded mr-2 mt-1 flex-shrink-0"></div>
+                                <div>
+                                    <span class="text-gray-300 font-medium">40% - Community & Rewards</span>
+                                    <p class="text-gray-400 text-sm mt-1">nagrody dla społeczności, programy lojalnościowe i airdropy</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="w-4 h-4 bg-yellow-600 rounded mr-2 mt-1 flex-shrink-0"></div>
+                                <div>
+                                    <span class="text-gray-300 font-medium">25% - Development</span>
+                                    <p class="text-gray-400 text-sm mt-1">rozwój platformy, technologie i dalsze innowacje</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="w-4 h-4 bg-yellow-700 rounded mr-2 mt-1 flex-shrink-0"></div>
+                                <div>
+                                    <span class="text-gray-300 font-medium">10% - VFG Marketing & Partnerships</span>
+                                    <p class="text-gray-400 text-sm mt-1">promocja marki, partnerstwa strategiczne i marketing</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="w-4 h-4 bg-yellow-800 rounded mr-2 mt-1 flex-shrink-0"></div>
+                                <div>
+                                    <span class="text-gray-300 font-medium">15% - Team & Advisors</span>
+                                    <p class="text-gray-400 text-sm mt-1">wynagrodzenia dla zespołu i doradców z klauzulami vesting</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="w-4 h-4 bg-yellow-900 rounded mr-2 mt-1 flex-shrink-0"></div>
+                                <div>
+                                    <span class="text-gray-300 font-medium">10% - Reserve & Liquidity</span>
+                                    <p class="text-gray-400 text-sm mt-1">rezerwa bezpieczeństwa i zapewnienie płynności na giełdach</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technologia -->
+<section id="tech" class="section-overlay py-20">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl md:text-4xl font-bold text-center mb-4 text-yellow-400">Technologia</h2>
+        <p class="text-gray-400 text-center max-w-3xl mx-auto mb-16">Nowoczesne rozwiązania i innowacje napędzające rozwój VFG Token</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="team-member token-card p-6 rounded-xl text-center">
+                <div class="w-32 h-32 rounded-full bg-gradient-to-r from-yellow-400 to-yellow-600 mx-auto mb-4 flex items-center justify-center">
+                    <i class="fas fa-code text-gray-900 text-4xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2 text-yellow-400">Blockchain</h3>
+                <p class="text-yellow-400 mb-4">Smart Contracty</p>
+                <p class="text-gray-400 text-sm">Bezpieczne i audytowane smart contracty oparte na Ethereum (ERC-20) & BNB Chain (BEP-20)</p>
+            </div>
+            
+            <div class="team-member token-card p-6 rounded-xl text-center">
+                <div class="w-32 h-32 rounded-full bg-gradient-to-r from-yellow-400 to-yellow-600 mx-auto mb-4 flex items-center justify-center">
+                    <i class="fas fa-shield-alt text-gray-900 text-4xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2 text-yellow-400">Bezpieczeństwo</h3>
+                <p class="text-yellow-400 mb-4">Ochrona Danych</p>
+                <p class="text-gray-400 text-sm">Zaawansowane systemy zabezpieczeń i szyfrowania użytkowników.</p>
+            </div>
+            
+            <div class="team-member token-card p-6 rounded-xl text-center">
+                <div class="w-32 h-32 rounded-full bg-gradient-to-r from-yellow-400 to-yellow-600 mx-auto mb-4 flex items-center justify-center">
+                    <i class="fas fa-bolt text-gray-900 text-4xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2 text-yellow-400">Web3</h3>
+                <p class="text-yellow-400 mb-4">Integracja</p>
+                <p class="text-gray-400 text-sm">Pełna integracja z ekosystemem Web3 i portfelami kryptowalut.</p>
+            </div>
+            
+            <div class="team-member token-card p-6 rounded-xl text-center">
+                <div class="w-32 h-32 rounded-full bg-gradient-to-r from-yellow-400 to-yellow-600 mx-auto mb-4 flex items-center justify-center">
+                    <i class="fas fa-cogs text-gray-900 text-4xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2 text-yellow-400">AI & Automation</h3>
+                <p class="text-yellow-400 mb-4">Automatyzacja</p>
+                <p class="text-gray-400 text-sm">Wsparcie sztucznej inteligencji w rozwoju i optymalizacji projektu.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Dołącz do Newslettera -->
+<section id="join" class="section-overlay py-20">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl md:text-4xl font-bold text-center mb-4 text-yellow-400">Bądź na Bieżąco</h2>
+        <p class="text-gray-400 text-center max-w-3xl mx-auto mb-16">Zapisz się do newslettera i otrzymuj najnowsze informacje o rozwoju projektu VFG Token.</p>
+        
+        <div class="max-w-2xl mx-auto token-card p-8 rounded-xl">
+            <div class="text-center">
+                <div class="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-envelope text-2xl text-yellow-400"></i>
+                </div>
+                <h3 class="text-xl font-bold text-yellow-400 mb-2">Newsletter VFG Token</h3>
+                <p class="text-gray-400 mb-6">Śledź rozwój projektu, poznaj daty premier i zgarnij dostęp do ekskluzywnych dropów NFT!</p>
+                
+                <!-- Formularz MailerLite -->
+                <style>
+                #mlb2-32215437.ml-form-embedContainer .ml-form-embedWrapper {
+                    background: transparent !important;
+                    border: none !important;
+                    box-shadow: none !important;
+                }
+                #mlb2-32215437.ml-form-embedContainer .ml-form-embedHeader {
+                    display: none !important;
+                }
+                #mlb2-32215437.ml-form-embedContainer .ml-form-embedContent h4 {
+                    color: #FFD700 !important;
+                    font-size: 28px !important;
+                    margin-bottom: 15px !important;
+                }
+                #mlb2-32215437.ml-form-embedContainer .ml-form-embedContent p {
+                    color: #9CA3AF !important;
+                    font-size: 16px !important;
+                    margin-bottom: 25px !important;
+                    line-height: 1.5 !important;
+                }
+                #mlb2-32215437.ml-form-embedContainer .ml-form-fieldRow input {
+                    background: #1F2937 !important;
+                    border: 1px solid #374151 !important;
+                    color: #F9FAFB !important;
+                    border-radius: 8px !important;
+                    padding: 15px 20px !important;
+                    font-size: 16px !important;
+                    margin-bottom: 15px !important;
+                }
+                #mlb2-32215437.ml-form-embedContainer .ml-form-fieldRow input::placeholder {
+                    color: #6B7280 !important;
+                }
+                #mlb2-32215437.ml-form-embedContainer .ml-form-embedSubmit button {
+                    background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%) !important;
+                    color: #1F2937 !important;
+                    border: none !important;
+                    border-radius: 8px !important;
+                    font-weight: 600 !important;
+                    padding: 15px 24px !important;
+                    width: 100% !important;
+                    font-size: 16px !important;
+                    margin-top: 10px !important;
+                }
+                #mlb2-32215437.ml-form-embedContainer .ml-form-embedPermissions {
+                    display: none !important;
+                }
+                /* STYLE DLA CHECKBOX RODO */
+                #mlb2-32215437.ml-form-embedContainer .ml-form-checkboxRow {
+                    display: block !important;
+                    margin: 20px 0 !important;
+                    text-align: left !important;
+                }
+                #mlb2-32215437.ml-form-embedContainer .ml-form-checkboxRow label {
+                    color: #9CA3AF !important;
+                    font-size: 14px !important;
+                    display: flex !important;
+                    align-items: flex-start !important;
+                    cursor: pointer !important;
+                }
+                #mlb2-32215437.ml-form-embedContainer .ml-form-checkboxRow input[type="checkbox"] {
+                    margin-right: 10px !important;
+                    margin-top: 2px !important;
+                    width: 16px !important;
+                    height: 16px !important;
+                }
+                #mlb2-32215437.ml-form-embedContainer .ml-form-checkboxRow .label-description {
+                    color: #9CA3AF !important;
+                    font-size: 14px !important;
+                    line-height: 1.4 !important;
+                }
+                #mlb2-32215437.ml-form-embedContainer .ml-form-checkboxRow .label-description a {
+                    color: #FFD700 !important;
+                    text-decoration: underline !important;
+                }
+                #mlb2-32215437.ml-form-embedContainer .ml-form-embedContent {
+                    margin-bottom: 30px !important;
+                }
+                #mlb2-32215437.ml-form-embedContainer .ml-form-fieldRow {
+                    margin-bottom: 20px !important;
+                }
+                </style>
+
+                <div id="mlb2-32215437" class="ml-form-embedContainer ml-subscribe-form ml-subscribe-form-32215437">
+                    <div class="ml-form-align-center">
+                        <div class="ml-form-embedWrapper embedForm">
+                            <div class="ml-form-embedBody ml-form-embedBodyDefault row-form">
+                                <div class="ml-form-embedContent">
+                                    <h3 class="text-xl font-bold text-yellow-400 mb-2">Zapisz się do naszego newslettera</h3>
+                                </div>
+                                <form class="ml-block-form" action="https://assets.mailerlite.com/jsonp/1864052/forms/168521493557282367/subscribe" data-code="" method="post" target="_blank">
+                                    <div class="ml-form-formContent">
+                                        <div class="ml-form-fieldRow ml-last-item">
+                                            <div class="ml-field-group ml-field-email ml-validate-email ml-validate-required">
+                                                <input aria-label="email" aria-required="true" type="email" class="form-control" data-inputmask="" name="fields[email]" placeholder="Twój adres email" autocomplete="email" required>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- DODANY CHECKBOX RODO -->
+                                    <div class="ml-form-checkboxRow ml-validate-required">
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="terms" required>
+                                            <div class="label-description">
+                                                <p>Wyrażam zgodę na przetwarzanie moich danych osobowych przez VFG Token w celu otrzymywania newslettera zgodnie z <a href="privacy.html" target="_blank">Polityką Prywatności</a> i <a href="privacy.html#rodo" target="_blank">RODO</a>.</p>
+                                            </div>
+                                        </label>
+                                    </div>
+
+                                    <div class="ml-form-embedSubmit">
+                                        <button type="submit" class="primary">Zapisz się</button>
+                                        <button disabled="disabled" style="display: none;" type="button" class="loading">
+                                            <div class="ml-form-embedSubmitLoad"></div>
+                                            <span class="sr-only">Loading...</span>
+                                        </button>
+                                    </div>
+                                    <input type="hidden" name="ml-submit" value="1">
+                                    <input type="hidden" name="anticsrf" value="true">
+                                </form>
+                            </div>
+                            <div class="ml-form-successBody row-success" style="display: none">
+                                <div class="ml-form-successContent">
+                                    <h4>Dziękujemy!</h4>
+                                    <p>Pomyślnie zapisałeś się do naszego newslettera.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    function ml_webform_success_32215437() {
+                        var $ = ml_jQuery || jQuery;
+                        $('.ml-subscribe-form-32215437 .row-success').show();
+                        $('.ml-subscribe-form-32215437 .row-form').hide();
+                    }
+                </script>
+                <script src="https://groot.mailerlite.com/js/w/webforms.min.js?v176e10baa5e7ed80d35ae235be3d5024" type="text/javascript"></script>
+                <script>fetch("https://assets.mailerlite.com/jsonp/1864052/forms/168521493557282367/takel")</script>
+                <!-- Koniec formularza MailerLite -->
+            </div>
+        </div>
+    </div>
+</section>
+
+    <!-- Stopka -->
+    <footer class="bg-gray-900 border-t border-yellow-600/30 py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-8 h-8 rounded-full bg-gradient-to-r from-yellow-400 to-yellow-600 flex items-center justify-center">
+                            <span class="font-bold text-gray-900 text-sm">VFG</span>
+                        </div>
+                        <span class="font-bold text-yellow-400">VFG Token</span>
+                    </div>
+                    <p class="text-gray-400 text-sm">Token przyszłości motoryzacji. Paliwo ekosystemu tuningu online.</p>
+                </div>
+                
+                <div>
+                    <h3 class="font-bold mb-4 text-yellow-400">Szybkie linki</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#about" class="text-gray-400 hover:text-yellow-400 transition-colors text-sm">O Projekcie</a></li>
+                        <li><a href="#community" class="text-gray-400 hover:text-yellow-400 transition-colors text-sm">Community</a></li>
+                        <li><a href="#presale" class="text-gray-400 hover:text-yellow-400 transition-colors text-sm">Przedsprzedaż</a></li>
+                        <li><a href="#tokenomics" class="text-gray-400 hover:text-yellow-400 transition-colors text-sm">Tokenomia</a></li>
+                        <li><a href="#tech" class="text-gray-400 hover:text-yellow-400 transition-colors text-sm">Technologia</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="font-bold mb-4 text-yellow-400">Dokumenty</h3>
+                    <ul class="space-y-2">
+                        <li><a href="whitepaper.html" class="text-gray-400 hover:text-yellow-400 transition-colors text-sm">Whitepaper</a></li>
+                        <li><a href="privacy.html" class="text-gray-400 hover:text-yellow-400 transition-colors text-sm">Polityka Prywatności</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+    <div>
+    <h3 class="font-bold mb-4 text-yellow-400">Social Media</h3>
+    <div class="flex space-x-4">
+        <a href="https://t.me/VFGTOKEN" target="_blank" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:text-yellow-400 hover:bg-gray-700 transition-colors">
+            <i class="fab fa-telegram"></i>
+        </a>
+        <a href="https://x.com/VFGTOKEN" target="_blank" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:text-yellow-400 hover:bg-gray-700 transition-colors">
+            <span class="font-bold text-white">X</span>
+        </a>
+        <a href="https://www.youtube.com/@VFG-TOKEN" target="_blank" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:text-yellow-400 hover:bg-gray-700 transition-colors">
+            <i class="fab fa-youtube"></i>
+        </a>
+        <a href="https://discord.gg/eBh5VFFm" target="_blank" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:text-yellow-400 hover:bg-gray-700 transition-colors">
+            <i class="fab fa-discord"></i>
+        </a>
+    </div>
+    
+    <div class="mt-6 text-center">
+        <h3 class="font-bold mb-2 text-yellow-400">Kontakt Email</h3>
+        <a href="mailto:VFGTOKEN@GMAIL.COM" class="text-yellow-400 hover:text-yellow-300 transition-colors text-lg font-semibold">
+            VFGTOKEN@GMAIL.COM
+        </a>
+    </div>
+</div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500 text-sm">
+                <p>© VFG Token 2025. Logo and content created with AI based on original concept. All rights reserved.|</p>
+            </div>
+        </div>
+    </footer>
+
+  <!-- Modal Admin Login -->
+    <div id="adminLoginModal" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 hidden">
+        <div class="glass-card p-8 rounded-xl max-w-md w-full mx-4">
+            <h3 class="text-2xl font-bold text-yellow-400 mb-6">Logowanie Admina</h3>
+            <div class="space-y-4">
+                <input type="password" id="adminPassword" placeholder="Hasło admina" class="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                <div class="flex space-x-4">
+                    <button id="confirmAdminLogin" class="btn-primary flex-1 py-3 rounded-xl">Zaloguj</button>
+                    <button id="closeAdminModal" class="btn-secondary flex-1 py-3 rounded-xl">Anuluj</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sekcja Admin Panel -->
+    <section id="admin" class="section-overlay py-20 hidden">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-4 text-yellow-400">Panel Admina</h2>
+            
+            <div class="max-w-6xl mx-auto">
+                <div class="flex space-x-4 mb-6">
+                    <button class="tab-btn px-4 py-2 rounded-lg border border-yellow-600 text-yellow-400 tab-active" data-tab="news">Zarządzanie Newsami</button>
+                    <button class="tab-btn px-4 py-2 rounded-lg border border-yellow-600 text-yellow-400" data-tab="users">Użytkownicy</button>
+                    <button class="tab-btn px-4 py-2 rounded-lg border border-yellow-600 text-yellow-400" data-tab="settings">Ustawienia</button>
+                    <button id="adminLogout" class="ml-auto px-4 py-2 rounded-lg bg-red-600 text-white">Wyloguj</button>
+                </div>
+                
+                <!-- News Management Tab -->
+                <div id="news" class="admin-tab">
+                    <div class="glass-card p-6">
+                        <h3 class="text-xl font-bold text-yellow-400 mb-4">Dodaj News</h3>
+                        <div class="space-y-4">
+                            <input type="text" id="newsTitle" placeholder="Tytuł newsa" class="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                            <textarea id="newsContent" placeholder="Treść newsa" rows="4" class="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"></textarea>
+                            <button id="publishNews" class="btn-primary px-6 py-3 rounded-xl">Opublikuj News</button>
+                        </div>
+                        
+                        <h3 class="text-xl font-bold text-yellow-400 mt-8 mb-4">Aktualne Newsy</h3>
+                        <div id="adminNewsList" class="space-y-4">
+                            <!-- News list loaded by JS -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Users Management Tab -->
+                <div id="users" class="admin-tab hidden">
+                    <div class="glass-card p-6">
+                        <h3 class="text-xl font-bold text-yellow-400 mb-4">Zarejestrowani Użytkownicy</h3>
+                        <div id="userList" class="space-y-3">
+                            <!-- User list loaded by JS -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Settings Tab -->
+                <div id="settings" class="admin-tab hidden">
+                    <div class="glass-card p-6">
+                        <h3 class="text-xl font-bold text-yellow-400 mb-4">Ustawienia Projektu</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-gray-300 mb-2">Nazwa projektu</label>
+                                <input type="text" id="projectName" class="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                            </div>
+                            <div>
+                                <label class="block text-gray-300 mb-2">Data premiery</label>
+                                <input type="text" id="launchDate" class="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                            </div>
+                            <button id="saveSettings" class="btn-primary px-6 py-3 rounded-xl">Zapisz Ustawienia</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- JavaScript -->
+    <script>
+        // VFG Complete Promotional System
+        class VFGPromotionalSystem {
+            constructor() {
+                this.isAdmin = false;
+                this.adminPassword = "vfgadmin2025";
+                this.currentUser = null;
+                this.news = this.loadFromStorage('vfg_news') || [];
+                this.users = this.loadFromStorage('vfg_users') || [];
+                this.settings = this.loadFromStorage('vfg_settings') || {
+                    projectName: "VFG Token",
+                    launchDate: "2026 Q2",
+                    totalMembers: 2847,
+                    whitelistSpots: 1284
+                };
+                
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.renderNews();
+                this.updateStats();
+                this.loadSampleData();
+                this.startLiveUpdates();
+            }
+
+            setupEventListeners() {
+                // Wallet connection
+                document.getElementById('connectWallet').addEventListener('click', () => this.connectWallet());
+                
+                // Admin system
+                document.getElementById('adminLoginBtn').addEventListener('click', () => this.showAdminLogin());
+                document.getElementById('confirmAdminLogin').addEventListener('click', () => this.adminLogin());
+                document.getElementById('closeAdminModal').addEventListener('click', () => this.hideAdminLogin());
+                document.getElementById('adminLogout').addEventListener('click', () => this.adminLogout());
+                
+                // News management
+                document.getElementById('publishNews').addEventListener('click', () => this.publishNews());
+                
+                // Settings
+                document.getElementById('saveSettings').addEventListener('click', () => this.saveSettings());
+                
+                // Chat system
+                document.getElementById('sendMessage').addEventListener('click', () => this.sendMessage());
+                document.getElementById('messageInput').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.sendMessage();
+                });
+                
+                // Admin tabs
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => this.switchAdminTab(e.target.dataset.tab));
+                });
+                
+                // Whitelist form
+                document.getElementById('whitelist-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    document.getElementById('form-success').classList.remove('hidden');
+                    e.target.reset();
+                    setTimeout(() => {
+                        document.getElementById('form-success').classList.add('hidden');
+                    }, 5000);
+                });
+            }
+
+            // Storage system
+            loadFromStorage(key) {
+                try {
+                    return JSON.parse(localStorage.getItem(key));
+                } catch (e) {
+                    return null;
+                }
+            }
+
+            saveToStorage(key, data) {
+                localStorage.setItem(key, JSON.stringify(data));
+            }
+
+            // Wallet system
+            async connectWallet() {
+                if (typeof window.ethereum !== 'undefined') {
+                    try {
+                        const accounts = await window.ethereum.request({ 
+                            method: 'eth_requestAccounts' 
+                        });
+                        
+                        this.currentUser = accounts[0];
+                        const shortAddress = this.currentUser.substring(0, 6) + '...' + this.currentUser.substring(38);
+                        
+                        // Update UI
+                        document.getElementById('walletInfo').classList.remove('hidden');
+                        document.getElementById('walletShort').textContent = shortAddress;
+                        
+                        // Add user to system
+                        this.addUser(this.currentUser, shortAddress);
+                        
+                        // Add welcome message
+                        this.addChatMessage('System', `${shortAddress} dołączył do społeczności! 🎉`, 'system');
+                        
+                    } catch (error) {
+                        console.error('Wallet connection failed:', error);
+                    }
+                } else {
+                    alert('Zainstaluj MetaMask aby połączyć portfel!');
+                }
+            }
+
+            // Admin system
+            showAdminLogin() {
+                document.getElementById('adminLoginModal').classList.remove('hidden');
+            }
+
+            hideAdminLogin() {
+                document.getElementById('adminLoginModal').classList.add('hidden');
+            }
+
+            adminLogin() {
+                const password = document.getElementById('adminPassword').value;
+                if (password === this.adminPassword) {
+                    this.isAdmin = true;
+                    document.getElementById('admin').classList.remove('hidden');
+                    document.getElementById('adminNav').classList.remove('hidden');
+                    this.hideAdminLogin();
+                    this.renderAdminNews();
+                    this.renderUsers();
+                    this.loadSettings();
+                } else {
+                    alert('Nieprawidłowe hasło admina!');
+                }
+            }
+
+            adminLogout() {
+                this.isAdmin = false;
+                document.getElementById('admin').classList.add('hidden');
+                document.getElementById('adminNav').classList.add('hidden');
+            }
+
+            // News system
+            publishNews() {
+                if (!this.isAdmin) return;
+                
+                const title = document.getElementById('newsTitle').value;
+                const content = document.getElementById('newsContent').value;
+                
+                if (title && content) {
+                    const newsItem = {
+                        id: Date.now(),
+                        title,
+                        content,
+                        date: new Date().toLocaleDateString('pl-PL'),
+                        time: new Date().toLocaleTimeString('pl-PL')
+                    };
+                    
+                    this.news.unshift(newsItem);
+                    this.saveToStorage('vfg_news', this.news);
+                    this.renderNews();
+                    this.renderAdminNews();
+                    
+                    // Clear form
+                    document.getElementById('newsTitle').value = '';
+                    document.getElementById('newsContent').value = '';
+                    
+                    // Add announcement to chat
+                    this.addChatMessage('System', `📢 Nowy news: "${title}"`, 'system');
+                }
+            }
+
+            renderNews() {
+                const container = document.getElementById('newsContainer');
+                if (!container) return;
+                
+                container.innerHTML = '';
+                
+                this.news.forEach(item => {
+                    const newsElement = document.createElement('div');
+                    newsElement.className = 'glass-card p-6';
+                    newsElement.innerHTML = `
+                        <h3 class="text-xl font-bold text-yellow-400 mb-2">${item.title}</h3>
+                        <p class="text-gray-300 mb-4">${item.content}</p>
+                        <div class="flex justify-between items-center text-sm text-gray-400">
+                            <span>${item.date} ${item.time}</span>
+                        </div>
+                    `;
+                    container.appendChild(newsElement);
+                });
+            }
+
+            renderAdminNews() {
+                const container = document.getElementById('adminNewsList');
+                container.innerHTML = '';
+                
+                this.news.forEach(item => {
+                    const newsElement = document.createElement('div');
+                    newsElement.className = 'flex justify-between items-center p-3 bg-gray-800 rounded-xl';
+                    newsElement.innerHTML = `
+                        <div>
+                            <div class="font-semibold text-yellow-400">${item.title}</div>
+                            <div class="text-sm text-gray-400">${item.date}</div>
+                        </div>
+                        <button onclick="vfgSystem.deleteNews(${item.id})" class="text-red-400 hover:text-red-300">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    `;
+                    container.appendChild(newsElement);
+                });
+            }
+
+            deleteNews(id) {
+                if (!this.isAdmin) return;
+                this.news = this.news.filter(item => item.id !== id);
+                this.saveToStorage('vfg_news', this.news);
+                this.renderNews();
+                this.renderAdminNews();
+            }
+
+            // User system
+            addUser(address, shortAddress) {
+                const existingUser = this.users.find(u => u.address === address);
+                if (!existingUser) {
+                    this.users.push({
+                        address,
+                        shortAddress,
+                        joined: new Date().toLocaleDateString('pl-PL'),
+                        messages: 0
+                    });
+                    this.saveToStorage('vfg_users', this.users);
+                    this.updateStats();
+                }
+            }
+
+            renderUsers() {
+                const container = document.getElementById('userList');
+                container.innerHTML = '';
+                
+                this.users.forEach(user => {
+                    const userElement = document.createElement('div');
+                    userElement.className = 'flex justify-between items-center p-3 bg-gray-800 rounded-xl';
+                    userElement.innerHTML = `
+                        <div class="flex items-center space-x-3">
+                            <div class="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                            <span class="text-yellow-400">${user.shortAddress}</span>
+                        </div>
+                        <span class="text-gray-400 text-sm">Dołączył: ${user.joined}</span>
+                    `;
+                    container.appendChild(userElement);
+                });
+            }
+
+            // Chat system
+            sendMessage() {
+                if (!this.currentUser) {
+                    alert('Najpierw połącz portfel aby pisać na chatcie!');
+                    return;
+                }
+
+                const input = document.getElementById('messageInput');
+                const message = input.value.trim();
+                
+                if (message) {
+                    const shortAddress = this.currentUser.substring(0, 6) + '...' + this.currentUser.substring(38);
+                    this.addChatMessage(shortAddress, message, 'self');
+                    input.value = '';
+                    
+                    // Update user message count
+                    const user = this.users.find(u => u.address === this.currentUser);
+                    if (user) user.messages++;
+                    
+                    // Simulate community responses
+                    setTimeout(() => {
+                        this.generateCommunityResponse(message);
+                    }, 1000 + Math.random() * 2000);
+                }
+            }
+
+            addChatMessage(user, message, type) {
+                const container = document.getElementById('chatMessages');
+                const messageDiv = document.createElement('div');
+                
+                messageDiv.className = `p-3 rounded-xl max-w-xs ${
+                    type === 'self' ? 'message-self ml-auto' : 
+                    type === 'system' ? 'bg-blue-500/20 text-blue-300 text-center' : 'message-other'
+                }`;
+                
+                if (type !== 'system') {
+                    messageDiv.innerHTML = `
+                        <div class="font-semibold text-sm ${type === 'self' ? 'text-gray-900' : 'text-yellow-400'}">
+                            ${user}
+                        </div>
+                        <div class="mt-1 ${type === 'self' ? 'text-gray-900' : 'text-white'}">
+                            ${message}
+                        </div>
+                        <div class="text-xs mt-1 ${type === 'self' ? 'text-gray-700' : 'text-gray-400'}">
+                            teraz
+                        </div>
+                    `;
+                } else {
+                    messageDiv.textContent = message;
+                }
+                
+                container.appendChild(messageDiv);
+                container.scrollTop = container.scrollHeight;
+            }
+
+            generateCommunityResponse(triggerMessage) {
+                const responses = {
+                    'price': 'Nie mogę się doczekać premiery tokena! Obecna przewidywana cena jest bardzo atrakcyjna 🚀',
+                    'ama': 'Sesje AMA były niesamowite! Tak dużo transparentności od zespołu 📅',
+                    'when': 'Premiera za 6 miesięcy - idealny czas na budowanie społeczności! 💰',
+                    'team': 'Doświadczenie zespołu w krypto i motoryzacji jest imponujące! 👥',
+                    'ecosystem': 'Ekosystem VFG wygląda kompleksowo - Pay, Protect, Tune, wszystko! 🛠️',
+                    'default': [
+                        'Ten projekt ma ogromny potencjał! 🚀',
+                        'Społeczność rośnie tak szybko! 🌱',
+                        'Uwielbiam transparentność zespołu! 👍',
+                        '6-miesięczne budowanie jest mądre - tworzy prawdziwy organiczny wzrost 📈',
+                        'Połączenie motoryzacji + krypto jest genialne! 🚗💨'
+                    ]
+                };
+
+                let response = responses.default[Math.floor(Math.random() * responses.default.length)];
+                
+                Object.keys(responses).forEach(key => {
+                    if (triggerMessage.toLowerCase().includes(key) && key !== 'default') {
+                        response = responses[key];
+                    }
+                });
+
+                const communityMembers = ['CryptoCarEnthusiast', 'AutoTechInvestor', 'BlockchainDriver', 'VFGSupporter', 'FutureHolder'];
+                const randomUser = communityMembers[Math.floor(Math.random() * communityMembers.length)];
+                
+                this.addChatMessage(randomUser, response, 'other');
+            }
+
+            // Settings system
+            loadSettings() {
+                document.getElementById('projectName').value = this.settings.projectName;
+                document.getElementById('launchDate').value = this.settings.launchDate;
+            }
+
+            saveSettings() {
+                if (!this.isAdmin) return;
+                
+                this.settings.projectName = document.getElementById('projectName').value;
+                this.settings.launchDate = document.getElementById('launchDate').value;
+                
+                this.saveToStorage('vfg_settings', this.settings);
+                this.updateStats();
+                
+                alert('Ustawienia projektu zaktualizowane pomyślnie!');
+            }
+
+            // Stats system
+            updateStats() {
+                document.getElementById('statsMembers').textContent = this.settings.totalMembers.toLocaleString();
+                document.getElementById('statsOnline').textContent = Math.floor(50 + Math.random() * 100);
+                document.getElementById('onlineCount').textContent = Math.floor(50 + Math.random() * 100);
+            }
+
+            // Admin tabs
+            switchAdminTab(tabName) {
+                // Update tab buttons
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.classList.remove('tab-active');
+                });
+                event.target.classList.add('tab-active');
+                
+                // Show selected tab
+                document.querySelectorAll('.admin-tab').forEach(tab => {
+                    tab.classList.add('hidden');
+                });
+                document.getElementById(tabName).classList.remove('hidden');
+            }
+
+            // Live updates and community simulation
+            startLiveUpdates() {
+                // Update stats periodically
+                setInterval(() => {
+                    this.updateStats();
+                }, 30000);
+
+                // Simulate organic community activity
+                setInterval(() => {
+                    if (Math.random() > 0.4) {
+                        const messages = [
+                            'Kiedy następne community AMA?',
+                            '6-miesięczny roadmap wygląda solidnie!',
+                            'Właśnie dołączyłem do whitelist - podekscytowany premierą!',
+                            'Use case\'y motoryzacyjne są rewolucyjne',
+                            'Ilu członków zespołu pracuje nad tym projektem?',
+                            'Wzrost społeczności jest imponujący!',
+                            'Co wyróżnia VFG spośród innych tokenów automotive?',
+                            'Nie mogę się doczekać aplikacji mobilnej!',
+                            'Tokenomics wygląda przemyślanie',
+                            'Kiedy smart contract będzie audytowany?'
+                        ];
+                        const users = ['CryptoEnthusiast', 'AutoInvestor', 'TechGuru', 'BlockchainFan', 'EarlySupporter'];
+                        const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+                        const randomUser = users[Math.floor(Math.random() * users.length)];
+                        
+                        this.addChatMessage(randomUser, randomMessage, 'other');
+                    }
+                }, 12000);
+
+                // Simulate organic community growth
+                setInterval(() => {
+                    if (Math.random() > 0.7) {
+                        this.settings.totalMembers++;
+                        this.settings.whitelistSpots = Math.max(0, this.settings.whitelistSpots - 1);
+                        this.updateStats();
+                        this.saveToStorage('vfg_settings', this.settings);
+                    }
+                }, 45000);
+            }
+
+            // Sample data for demonstration
+            loadSampleData() {
+                if (this.news.length === 0) {
+                    this.news = [
+                        {
+                            id: 1,
+                            title: 'VFG Token - Start Budowy Społeczności!',
+                            content: 'Z radością ogłaszamy rozpoczęcie fazy budowy społeczności przed premierą tokena w 2026 Q2. Dołącz do nas w rewolucjonizowaniu automotive crypto!',
+                            date: new Date().toLocaleDateString('pl-PL'),
+                            time: new Date().toLocaleTimeString('pl-PL')
+                        }
+                    ];
+                    this.saveToStorage('vfg_news', this.news);
+                }
+
+                // Load sample activity feed
+                this.loadSampleActivity();
+            }
+
+            loadSampleActivity() {
+                const activityContainer = document.getElementById('activityFeed');
+                if (!activityContainer) return;
+                
+                const activities = [
+                    { user: 'CryptoMax', action: 'dołączył do whitelist', time: '2 min temu' },
+                    { user: 'AnnaTrader', action: 'dołączył do społeczności', time: '5 min temu' },
+                    { user: 'BlockChainPro', action: 'udostępnił na Twitterze', time: '8 min temu' },
+                    { user: 'AutoEnthusiast', action: 'zaprosił 3 znajomych', time: '12 min temu' }
+                ];
+
+                activities.forEach(activity => {
+                    const activityElement = document.createElement('div');
+                    activityElement.className = 'flex items-center justify-between p-2 bg-gray-800/50 rounded-lg';
+                    activityElement.innerHTML = `
+                        <div class="flex items-center space-x-2">
+                            <span class="text-yellow-400 font-semibold">${activity.user}</span>
+                            <span class="text-gray-400">${activity.action}</span>
+                        </div>
+                        <span class="text-gray-500 text-sm">${activity.time}</span>
+                    `;
+                    activityContainer.appendChild(activityElement);
+                });
+            }
+        }
+
+        // Initialize the complete promotional system
+        let vfgSystem;
+        document.addEventListener('DOMContentLoaded', function() {
+            vfgSystem = new VFGPromotionalSystem();
+            
+            // Płynne przewijanie do sekcji
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    if(targetId === '#') return;
+                    const targetElement = document.querySelector(targetId);
+                    if(targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
