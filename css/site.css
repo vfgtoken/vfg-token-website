@@ -1,4 +1,4 @@
-﻿        :root {
+        :root {
             --primary: #FFD700;
             --primary-dark: #B8860B;
             --secondary: #1a202c;
@@ -158,3 +158,4 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
         }
+

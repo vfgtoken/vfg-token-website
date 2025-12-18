@@ -7,6 +7,9 @@
     <meta name="description" content="VFG Token to ekosystem Web3 dla motoryzacji: płatności, tuning, ochrona, diagnostyka i usługi serwisowe. Roadmapa VFG Token 2.0 oraz moduły VFG Pay, Protect, Tune i VFG Fix (VFG-FIX.com).">
     <meta name="robots" content="index,follow">
     <meta name="theme-color" content="#0a0a0a">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/images/logo.png">
+    <link rel="manifest" href="/site.webmanifest">
     <link rel="canonical" href="https://vfg-token.com/">
 
     <meta property="og:type" content="website">
@@ -33,7 +36,13 @@
                     "@type": "Organization",
                     "name": "VFG Token",
                     "url": "https://vfg-token.com/",
-                    "logo": "https://vfg-token.com/images/logo.png"
+                    "logo": "https://vfg-token.com/images/logo.png",
+                    "sameAs": [
+                        "https://t.me/VFGTOKEN",
+                        "https://x.com/VFGTOKEN",
+                        "https://www.youtube.com/@VFG-TOKEN",
+                        "https://discord.gg/eBh5VFFm"
+                    ]
                 },
                 {
                     "@type": "WebSite",
@@ -236,9 +245,20 @@
                     <span class="text-green-400 text-sm" id="walletShort">0x742d...3b8D</span>
                 </div>
                 
-                <button class="md:hidden text-gray-300">
+                <button id="mobileMenuButton" type="button" class="md:hidden text-gray-300" aria-controls="mobileMenu" aria-expanded="false" aria-label="Menu">
                     <i class="fas fa-bars"></i>
                 </button>
+            </div>
+        </div>
+        <div id="mobileMenu" class="md:hidden hidden bg-gray-900/90 backdrop-blur-md border-t border-yellow-600/30">
+            <div class="container mx-auto px-4 py-4 flex flex-col space-y-3">
+                <a href="#about" class="text-gray-200 hover:text-yellow-400 transition-colors">O Projekcie</a>
+                <a href="vfg-fix.html" class="text-gray-200 hover:text-yellow-400 transition-colors">VFG-FIX.com</a>
+                <a href="#community" class="text-gray-200 hover:text-yellow-400 transition-colors">Community</a>
+                <a href="#presale" class="text-gray-200 hover:text-yellow-400 transition-colors">Przedsprzedaż</a>
+                <a href="#tokenomics" class="text-gray-200 hover:text-yellow-400 transition-colors">Tokenomia</a>
+                <a href="#tech" class="text-gray-200 hover:text-yellow-400 transition-colors">Technologia</a>
+                <a href="#join" class="text-gray-200 hover:text-yellow-400 transition-colors">Dołącz</a>
             </div>
         </div>
     </nav>
@@ -247,7 +267,7 @@
 <section class="section-overlay hero-gradient py-20 md:py-32">
     <div class="container mx-auto px-4 flex flex-col items-center text-center">
         <div class="mb-6">
-            <img src="images/logo.png" alt="VFG Token" class="w-48 h-48 mx-auto">
+            <img src="images/logo.png" alt="VFG Token" class="w-48 h-48 mx-auto" width="1024" height="1024" decoding="async" fetchpriority="high">
         </div>
         <h1 class="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 text-transparent bg-clip-text drop-shadow-lg">
             VFG TOKEN
@@ -424,7 +444,7 @@
     <div class="text-center p-6">
     <a href="https://x.com/VFGTOKEN" target="_blank" class="block hover:scale-105 transition-transform">
         <div class="w-16 h-16 bg-black rounded-full flex items-center justify-center mx-auto mb-4">
-            <img src="images/xlogo.png" alt="X" class="w-8 h-8">
+            <img src="images/xlogo.png" alt="X" class="w-8 h-8" width="320" height="320" loading="lazy" decoding="async">
         </div>
         <h3 class="text-xl font-bold text-yellow-400 mb-2">X</h3>
         <p class="text-gray-400">Śledź aktualności</p>
@@ -730,7 +750,7 @@
                         <div class="h-64 flex items-center justify-center mb-6">
     <img src="images/tokenomics-chart.png" 
          alt="Podział tokenów VFG" 
-         class="h-full object-contain">
+         class="h-full object-contain" loading="lazy" decoding="async" width="1536" height="1024">
 </div>
                         </div>
                         
@@ -1603,6 +1623,23 @@
                     }
                 });
             });
+
+            const mobileMenuButton = document.getElementById('mobileMenuButton');
+            const mobileMenu = document.getElementById('mobileMenu');
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', () => {
+                    const isHidden = mobileMenu.classList.contains('hidden');
+                    mobileMenu.classList.toggle('hidden');
+                    mobileMenuButton.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+                });
+
+                mobileMenu.querySelectorAll('a').forEach((link) => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.add('hidden');
+                        mobileMenuButton.setAttribute('aria-expanded', 'false');
+                    });
+                });
+            }
         });
     </script>
 </body>

@@ -1,4 +1,4 @@
-﻿        // VFG Complete Promotional System
+        // VFG Complete Promotional System
         class VFGPromotionalSystem {
             constructor() {
                 this.isAdmin = false;
@@ -94,13 +94,13 @@
                         this.addUser(this.currentUser, shortAddress);
                         
                         // Add welcome message
-                        this.addChatMessage('System', `${shortAddress} doĹ‚Ä…czyĹ‚ do spoĹ‚ecznoĹ›ci! đźŽ‰`, 'system');
+                        this.addChatMessage('System', `${shortAddress} dołączył do społeczności! 🎉`, 'system');
                         
                     } catch (error) {
                         console.error('Wallet connection failed:', error);
                     }
                 } else {
-                    alert('Zainstaluj MetaMask aby poĹ‚Ä…czyÄ‡ portfel!');
+                    alert('Zainstaluj MetaMask aby połączyć portfel!');
                 }
             }
 
@@ -124,7 +124,7 @@
                     this.renderUsers();
                     this.loadSettings();
                 } else {
-                    alert('NieprawidĹ‚owe hasĹ‚o admina!');
+                    alert('Nieprawidłowe hasło admina!');
                 }
             }
 
@@ -160,7 +160,7 @@
                     document.getElementById('newsContent').value = '';
                     
                     // Add announcement to chat
-                    this.addChatMessage('System', `đź“˘ Nowy news: "${title}"`, 'system');
+                    this.addChatMessage('System', `📢 Nowy news: "${title}"`, 'system');
                 }
             }
 
@@ -239,7 +239,7 @@
                             <div class="w-3 h-3 bg-yellow-400 rounded-full"></div>
                             <span class="text-yellow-400">${user.shortAddress}</span>
                         </div>
-                        <span class="text-gray-400 text-sm">DoĹ‚Ä…czyĹ‚: ${user.joined}</span>
+                        <span class="text-gray-400 text-sm">Dołączył: ${user.joined}</span>
                     `;
                     container.appendChild(userElement);
                 });
@@ -248,7 +248,7 @@
             // Chat system
             sendMessage() {
                 if (!this.currentUser) {
-                    alert('Najpierw poĹ‚Ä…cz portfel aby pisaÄ‡ na chatcie!');
+                    alert('Najpierw połącz portfel aby pisać na chatcie!');
                     return;
                 }
 
@@ -302,17 +302,17 @@
 
             generateCommunityResponse(triggerMessage) {
                 const responses = {
-                    'price': 'Nie mogÄ™ siÄ™ doczekaÄ‡ premiery tokena! Obecna przewidywana cena jest bardzo atrakcyjna đźš€',
-                    'ama': 'Sesje AMA byĹ‚y niesamowite! Tak duĹĽo transparentnoĹ›ci od zespoĹ‚u đź“…',
-                    'when': 'Premiera za 6 miesiÄ™cy - idealny czas na budowanie spoĹ‚ecznoĹ›ci! đź’°',
-                    'team': 'DoĹ›wiadczenie zespoĹ‚u w krypto i motoryzacji jest imponujÄ…ce! đź‘Ą',
-                    'ecosystem': 'Ekosystem VFG wyglÄ…da kompleksowo - Pay, Protect, Tune, wszystko! đź› ď¸Ź',
+                    'price': 'Nie mogę się doczekać premiery tokena! Obecna przewidywana cena jest bardzo atrakcyjna 🚀',
+                    'ama': 'Sesje AMA były niesamowite! Tak dużo transparentności od zespołu 📅',
+                    'when': 'Premiera za 6 miesięcy - idealny czas na budowanie społeczności! 💰',
+                    'team': 'Doświadczenie zespołu w krypto i motoryzacji jest imponujące! 👥',
+                    'ecosystem': 'Ekosystem VFG wygląda kompleksowo - Pay, Protect, Tune, wszystko! 🛠️',
                     'default': [
-                        'Ten projekt ma ogromny potencjaĹ‚! đźš€',
-                        'SpoĹ‚ecznoĹ›Ä‡ roĹ›nie tak szybko! đźŚ±',
-                        'Uwielbiam transparentnoĹ›Ä‡ zespoĹ‚u! đź‘Ť',
-                        '6-miesiÄ™czne budowanie jest mÄ…dre - tworzy prawdziwy organiczny wzrost đź“',
-                        'PoĹ‚Ä…czenie motoryzacji + krypto jest genialne! đźš—đź’¨'
+                        'Ten projekt ma ogromny potencjał! 🚀',
+                        'Społeczność rośnie tak szybko! 🌱',
+                        'Uwielbiam transparentność zespołu! 👍',
+                        '6-miesięczne budowanie jest mądre - tworzy prawdziwy organiczny wzrost 📈',
+                        'Połączenie motoryzacji + krypto jest genialne! 🚗💨'
                     ]
                 };
 
@@ -345,7 +345,7 @@
                 this.saveToStorage('vfg_settings', this.settings);
                 this.updateStats();
                 
-                alert('Ustawienia projektu zaktualizowane pomyĹ›lnie!');
+                alert('Ustawienia projektu zaktualizowane pomyślnie!');
             }
 
             // Stats system
@@ -381,16 +381,16 @@
                 setInterval(() => {
                     if (Math.random() > 0.4) {
                         const messages = [
-                            'Kiedy nastÄ™pne community AMA?',
-                            '6-miesiÄ™czny roadmap wyglÄ…da solidnie!',
-                            'WĹ‚aĹ›nie doĹ‚Ä…czyĹ‚em do whitelist - podekscytowany premierÄ…!',
-                            'Use case\'y motoryzacyjne sÄ… rewolucyjne',
-                            'Ilu czĹ‚onkĂłw zespoĹ‚u pracuje nad tym projektem?',
-                            'Wzrost spoĹ‚ecznoĹ›ci jest imponujÄ…cy!',
-                            'Co wyrĂłĹĽnia VFG spoĹ›rĂłd innych tokenĂłw automotive?',
-                            'Nie mogÄ™ siÄ™ doczekaÄ‡ aplikacji mobilnej!',
-                            'Tokenomics wyglÄ…da przemyĹ›lanie',
-                            'Kiedy smart contract bÄ™dzie audytowany?'
+                            'Kiedy następne community AMA?',
+                            '6-miesięczny roadmap wygląda solidnie!',
+                            'Właśnie dołączyłem do whitelist - podekscytowany premierą!',
+                            'Use case\'y motoryzacyjne są rewolucyjne',
+                            'Ilu członków zespołu pracuje nad tym projektem?',
+                            'Wzrost społeczności jest imponujący!',
+                            'Co wyróżnia VFG spośród innych tokenów automotive?',
+                            'Nie mogę się doczekać aplikacji mobilnej!',
+                            'Tokenomics wygląda przemyślanie',
+                            'Kiedy smart contract będzie audytowany?'
                         ];
                         const users = ['CryptoEnthusiast', 'AutoInvestor', 'TechGuru', 'BlockchainFan', 'EarlySupporter'];
                         const randomMessage = messages[Math.floor(Math.random() * messages.length)];
@@ -417,8 +417,8 @@
                     this.news = [
                         {
                             id: 1,
-                            title: 'VFG Token - Start Budowy SpoĹ‚ecznoĹ›ci!',
-                            content: 'Z radoĹ›ciÄ… ogĹ‚aszamy rozpoczÄ™cie fazy budowy spoĹ‚ecznoĹ›ci przed premierÄ… tokena w 2026 Q2. DoĹ‚Ä…cz do nas w rewolucjonizowaniu automotive crypto!',
+                            title: 'VFG Token - Start Budowy Społeczności!',
+                            content: 'Z radością ogłaszamy rozpoczęcie fazy budowy społeczności przed premierą tokena w 2026 Q2. Dołącz do nas w rewolucjonizowaniu automotive crypto!',
                             date: new Date().toLocaleDateString('pl-PL'),
                             time: new Date().toLocaleTimeString('pl-PL')
                         }
@@ -435,10 +435,10 @@
                 if (!activityContainer) return;
                 
                 const activities = [
-                    { user: 'CryptoMax', action: 'doĹ‚Ä…czyĹ‚ do whitelist', time: '2 min temu' },
-                    { user: 'AnnaTrader', action: 'doĹ‚Ä…czyĹ‚ do spoĹ‚ecznoĹ›ci', time: '5 min temu' },
-                    { user: 'BlockChainPro', action: 'udostÄ™pniĹ‚ na Twitterze', time: '8 min temu' },
-                    { user: 'AutoEnthusiast', action: 'zaprosiĹ‚ 3 znajomych', time: '12 min temu' }
+                    { user: 'CryptoMax', action: 'dołączył do whitelist', time: '2 min temu' },
+                    { user: 'AnnaTrader', action: 'dołączył do społeczności', time: '5 min temu' },
+                    { user: 'BlockChainPro', action: 'udostępnił na Twitterze', time: '8 min temu' },
+                    { user: 'AutoEnthusiast', action: 'zaprosił 3 znajomych', time: '12 min temu' }
                 ];
 
                 activities.forEach(activity => {
@@ -461,7 +461,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             vfgSystem = new VFGPromotionalSystem();
             
-            // PĹ‚ynne przewijanie do sekcji
+            // Płynne przewijanie do sekcji
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     e.preventDefault();
@@ -476,4 +476,21 @@
                     }
                 });
             });
+
+            const mobileMenuButton = document.getElementById('mobileMenuButton');
+            const mobileMenu = document.getElementById('mobileMenu');
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', () => {
+                    const isHidden = mobileMenu.classList.contains('hidden');
+                    mobileMenu.classList.toggle('hidden');
+                    mobileMenuButton.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+                });
+
+                mobileMenu.querySelectorAll('a').forEach((link) => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.add('hidden');
+                        mobileMenuButton.setAttribute('aria-expanded', 'false');
+                    });
+                });
+            }
         });
